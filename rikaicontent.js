@@ -1,44 +1,3 @@
-/*
-
-	Rikaikun
-	Copyright (C) 2010 Erek Speed
-	http://code.google.com/p/rikaikun/
-	
-	---
-
-	Originally based on Rikaichan 1.07
-	by Jonathan Zarate
-	http://www.polarcloud.com/
-
-	---
-
-	Originally based on RikaiXUL 0.4 by Todd Rudick
-	http://www.rikai.com/
-	http://rikaixul.mozdev.org/
-
-	---
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-	---
-
-	Please do not change or remove any of the copyrights or links to web pages
-	when modifying any of the files. - Jon
-
-*/
-
 var rcxContent = {
 
   dictCount: 3,
@@ -49,7 +8,7 @@ var rcxContent = {
   defaultDict: 2,
   nextDict: 3,
 
-  //Adds the listeners and stuff.
+  // Adds the listeners and stuff.
   enableTab: function() {
     if (window.rikaichan == null) {
       window.rikaichan = {};
@@ -61,7 +20,7 @@ var rcxContent = {
     }
   },
 
-  //Removes the listeners and stuff
+  // Removes the listeners and stuff
   disableTab: function() {
     if (window.rikaichan != null) {
       var e;
@@ -98,7 +57,6 @@ var rcxContent = {
 
     if ((isNaN(x)) || (isNaN(y))) x = y = 0;
 
-
     var popup = topdoc.getElementById('rikaichan-window');
     if (!popup) {
       var css = topdoc.createElementNS('http://www.w3.org/1999/xhtml', 'link');
@@ -120,12 +78,12 @@ var rcxContent = {
           ev.stopPropagation();
         }, true);
 
-      /* if (this.cfg.resizedoc) {
-      	if ((topdoc.body.clientHeight < 1024) && (topdoc.body.style.minHeight == '')) {
-      		topdoc.body.style.minHeight = '1024px';
-      		topdoc.body.style.overflow = 'auto';
-      	}
-      } */
+      //  if (this.cfg.resizedoc) {
+      //  if ((topdoc.body.clientHeight < 1024) && (topdoc.body.style.minHeight == '')) {
+      //    topdoc.body.style.minHeight = '1024px';
+      //    topdoc.body.style.overflow = 'auto';
+      //  }
+      // } 
     }
 
     popup.style.width = 'auto';
@@ -154,7 +112,7 @@ var rcxContent = {
       var pW = popup.offsetWidth;
       var pH = popup.offsetHeight;
 
-      // guess!
+      // Guess!
       if (pW <= 0) pW = 200;
       if (pH <= 0) {
         pH = 0;
@@ -175,7 +133,7 @@ var rcxContent = {
       }
       // FIXME: This probably doesn't actually work
       else if (elem instanceof window.HTMLOptionElement) {
-        // these things are always on z-top, so go sideways
+        // These things are always on z-top, so go sideways
 
         x = 0;
         y = 0;
@@ -189,52 +147,49 @@ var rcxContent = {
         if (elem.offsetTop > elem.parentNode.clientHeight) y -= elem.offsetTop;
 
         if ((x + popup.offsetWidth) > window.innerWidth) {
-          // too much to the right, go left
+          // Too much to the right, go left
           x -= popup.offsetWidth + 5;
           if (x < 0) x = 0;
         } else {
-          // use SELECT's width
+          // Use SELECT's width
           x += elem.parentNode.offsetWidth + 5;
         }
+        // In some cases (ex: google.co.jp), ebo doesn't add the width of the scroller (?), so use SELECT's width
+        // const epbo = elem.ownerDocument.getBoxObjectFor(elem.parentNode);
 
-        /*
-        				// in some cases (ex: google.co.jp), ebo doesn't add the width of the scroller (?), so use SELECT's width
-        				const epbo = elem.ownerDocument.getBoxObjectFor(elem.parentNode);
+        // const ebo = elem.ownerDocument.getBoxObjectFor(elem);
+        // x = ebo.screenX - bbo.screenX;
+        // y = ebo.screenY - bbo.screenY;
 
-        				const ebo = elem.ownerDocument.getBoxObjectFor(elem);
-        				x = ebo.screenX - bbo.screenX;
-        				y = ebo.screenY - bbo.screenY;
+        // if (x > (window.innerWidth - (x + epbo.width))) {
+        //  x = (x - popup.offsetWidth - 5);
+        //  if (x < 0) x = 0;
+        // }
+        // else {
+        //  x += epbo.width + 5;
+        // }
 
-        				if (x > (window.innerWidth - (x + epbo.width))) {
-        					x = (x - popup.offsetWidth - 5);
-        					if (x < 0) x = 0;
-        				}
-        				else {
-        					x += epbo.width + 5;
-        				}
-        */
       } else {
-        //x -= bbo.screenX;
-        //y -= bbo.screenY;
+        // x -= bbo.screenX;
+        // y -= bbo.screenY;
 
-        // go left if necessary
+        // Go left if necessary
         if ((x + pW) > (window.innerWidth - 20)) {
           x = (window.innerWidth - pW) - 20;
           if (x < 0) x = 0;
         }
 
-        // below the mouse
+        // Below the mouse
         var v = 25;
 
-        // under the popup title
+        // Under the popup title
         if ((elem.title) && (elem.title != '')) v += 20;
 
-        // go up if necessary
+        // Go up if necessary
         if ((y + v + pH) > window.innerHeight) {
           var t = y - pH - 30;
           if (t >= 0) y = t;
         } else y += v;
-
 
         x += window.scrollX;
         y += window.scrollY;
@@ -313,7 +268,7 @@ var rcxContent = {
     rcxContent._onKeyDown(ev)
   },
   _onKeyDown: function(ev) {
-    //		this.status("keyCode=" + ev.keyCode + ' charCode=' + ev.charCode + ' detail=' + ev.detail);
+    // this.status("keyCode=" + ev.keyCode + ' charCode=' + ev.charCode + ' detail=' + ev.detail);
 
     if ((ev.altKey) || (ev.metaKey) || (ev.ctrlKey)) return;
     if ((ev.shiftKey) && (ev.keyCode != 16)) return;
@@ -326,8 +281,8 @@ var rcxContent = {
     switch (ev.keyCode) {
       case 16: // shift
       case 13: // enter
-        //this.showMode = (this.showMode + 1) % this.dictCount;
-        //chrome.extension.sendMessage({"type":"nextDict"});
+        // this.showMode = (this.showMode + 1) % this.dictCount;
+        // chrome.extension.sendMessage({"type":"nextDict"});
         this.show(ev.currentTarget.rikaichan, this.nextDict);
         break;
       case 27: // esc
@@ -348,8 +303,8 @@ var rcxContent = {
         var ofs = ev.currentTarget.rikaichan.uofs;
         for (i = 50; i > 0; --i) {
           ev.currentTarget.rikaichan.uofs = --ofs;
-          //chrome.extension.sendMessage({"type":"resetDict"});
-          //this.showMode = 0;
+          // chrome.extension.sendMessage({"type":"resetDict"});
+          // this.showMode = 0;
           if (this.show(ev.currentTarget.rikaichan, this.defaultDict) >= 0) {
             if (ofs >= ev.currentTarget.rikaichan.uofs) break; // ! change later
           }
@@ -366,8 +321,8 @@ var rcxContent = {
       case 78: // n
         for (i = 50; i > 0; --i) {
           ev.currentTarget.rikaichan.uofs += ev.currentTarget.rikaichan.uofsNext;
-          //chrome.extension.sendMessage({"type":"resetDict"});
-          //this.showMode = 0;
+          // chrome.extension.sendMessage({"type":"resetDict"});
+          // this.showMode = 0;
           if (this.show(ev.currentTarget.rikaichan, this.defaultDict) >= 0) break;
         }
         break;
@@ -443,7 +398,7 @@ var rcxContent = {
     'B': true,
     'BIG': true,
     'SMALL': true,
-    //deprecated
+    // deprecated
     'STRIKE': true,
     'S': true,
     'U': true,
@@ -610,7 +565,6 @@ var rcxContent = {
       }
     }
 
-    //
     if ((isNaN(u)) ||
       ((u != 0x25CB) &&
         ((u < 0x3001) || (u > 0x30FF)) &&
@@ -622,9 +576,9 @@ var rcxContent = {
       return -2;
     }
 
-    //selection end data
+    // Selection end data
     var selEndList = [];
-    var text = this.getTextFromRange(rp, ro, selEndList, 13 /*maxlength*/ );
+    var text = this.getTextFromRange(rp, ro, selEndList, 13 /* maxlength */ );
 
     lastSelEnd = selEndList;
     lastRo = ro;
@@ -656,7 +610,7 @@ var rcxContent = {
     tdata.uofs = (ro - tdata.prevRangeOfs);
 
     rp = tdata.prevRangeNode;
-    // don't try to highlight form elements
+    // Don't try to highlight form elements
     if ((rp) && ((tdata.config.highlight == 'true' && !this.mDown && !('form' in tdata.prevTarget)) ||
         (('form' in tdata.prevTarget) && tdata.config.textboxhl == 'true'))) {
       var doc = rp.ownerDocument;
@@ -776,27 +730,10 @@ var rcxContent = {
       "entry": e
     }, rcxContent.processHtml);
   },
-  /*
-  	inRange: function (event) {
-  		var selection = event.view.getSelection();
-  		if ((selection.rangeCount === 0) || (!event.rangeParent)) return false;
-  		var newRange = event.view.document.createRange();
-  		newRange.setStart(event.rangeParent, event.rangeOffset);
-  		newRange.setEnd(event.rangeParent, event.rangeOffset);
-
-  		var curRange = selection.getRangeAt(0);
-  		if (newRange.compareBoundaryPoints(Range.START_TO_START, curRange) > -1 &&
-  			newRange.compareBoundaryPoints(Range.END_TO_END, curRange) < 0)
-  			return true;
-  		else return false;
-  	},
-  	
-  */
 
   getFirstTextChild: function(node) {
     return document.evaluate('descendant::text()[not(parent::rp) and not(ancestor::rt)]',
       node, null, XPathResult.ANY_TYPE, null).iterateNext();
-    //
   },
 
   makeFake: function(real) {
@@ -812,9 +749,7 @@ var rcxContent = {
       left: $(real).offset().left
     })
 
-
     return fake;
-
   },
 
   getTotalOffset: function(parent, tNode, offset) {
@@ -867,13 +802,9 @@ var rcxContent = {
         ro = this.getTotalOffset(rp.parentNode, rp, ro);
       }
 
-      /*   		console.log( "offset: " + ro + " parentContainer: " +  rp.nodeName + 
-      			" total size: " + (rp.data?rp.data.length:"") + " target: " + ev.target.nodeName + 
-      			" parentparent: " + rp.parentNode.nodeName); */
-
-
-
-
+      // console.log( "offset: " + ro + " parentContainer: " +  rp.nodeName + 
+      // " total size: " + (rp.data?rp.data.length:"") + " target: " + ev.target.nodeName + 
+      // " parentparent: " + rp.parentNode.nodeName); 
 
       if (tdata.timer) {
         clearTimeout(tdata.timer);
@@ -922,7 +853,6 @@ var rcxContent = {
         ro = 0;
       }
 
-
       // Otherwise, we're off in nowhere land and we should go home.
       // offset should be 0 or max in this case.
       else if (!(fake) && (!(rp) || ((rp.parentNode != ev.target)))) {
@@ -940,7 +870,7 @@ var rcxContent = {
       }
 
       if (ev.target == tdata.prevTarget && this.isVisible()) {
-        //console.log("exit due to same target");
+        // console.log("exit due to same target");
         if (tdata.title) {
           if (fake) document.body.removeChild(fake);
           return;
@@ -958,11 +888,10 @@ var rcxContent = {
       return;
     }
 
-
-    /*  		if ((rp) && (rp.nodeType != Node.TEXT_NODE) && !('form' in rp)) {
-    			rp = null;
-    			ro = -1;
-    		}  */
+    //   if ((rp) && (rp.nodeType != Node.TEXT_NODE) && !('form' in rp)) {
+    //   rp = null;
+    //   ro = -1;
+    // }  
 
     tdata.prevTarget = ev.target;
     tdata.prevRangeNode = rp;
@@ -977,15 +906,15 @@ var rcxContent = {
       tdata.popY = ev.clientY;
       tdata.timer = setTimeout(
         function() {
-          //chrome.extension.sendMessage({"type":"resetDict"});
-          //rcxContent.show(tdata, this.forceKanji ? this.forceKanji : this.defaultDict);
+          // chrome.extension.sendMessage({"type":"resetDict"});
+          // rcxContent.show(tdata, this.forceKanji ? this.forceKanji : this.defaultDict);
           rcxContent.show(tdata, rcxContent.forceKanji ? rcxContent.forceKanji : rcxContent.defaultDict);
-        }, 1 /*this.cfg.popdelay*/ );
-      //console.log("showed data");
+        }, 1 /* this.cfg.popdelay */ );
+      // console.log("showed data");
       return;
     }
 
-    if (true /*this.cfg.title*/ ) {
+    if (true /* this.cfg.title */ ) {
       if ((typeof(ev.target.title) == 'string') && (ev.target.title.length)) {
         tdata.title = ev.target.title;
       } else if ((typeof(ev.target.alt) == 'string') && (ev.target.alt.length)) {
@@ -1006,9 +935,9 @@ var rcxContent = {
       tdata.timer = setTimeout(
         function(tdata) {
           rcxContent.showTitle(tdata);
-        }, 1 /*this.cfg.popdelay*/ , tdata);
+        }, 1 /* this.cfg.popdelay */ , tdata);
     } else {
-      // dont close just because we moved from a valid popup slightly over to a place with nothing
+      // Dont close just because we moved from a valid popup slightly over to a place with nothing
       var dx = tdata.popX - ev.clientX;
       var dy = tdata.popY - ev.clientY;
       var distance = Math.sqrt(dx * dx + dy * dy);
@@ -1021,7 +950,7 @@ var rcxContent = {
   }
 }
 
-//Event Listeners
+// Event Listeners
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     switch (request.type) {

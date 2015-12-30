@@ -1,45 +1,4 @@
-﻿/*
-
-	Rikaikun
-	Copyright (C) 2010 Erek Speed
-	http://code.google.com/p/rikaikun/
-	
-	---
-
-	Originally based on Rikaichan 1.07
-	by Jonathan Zarate
-	http://www.polarcloud.com/
-
-	---
-
-	Originally based on RikaiXUL 0.4 by Todd Rudick
-	http://www.rikai.com/
-	http://rikaixul.mozdev.org/
-
-	---
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-	---
-
-	Please do not change or remove any of the copyrights or links to web pages
-	when modifying any of the files. - Jon
-
-*/
-
-function rcxDict(loadNames) {
+﻿function rcxDict(loadNames) {
   this.loadDictionary();
   if (loadNames) this.loadNames();
   this.loadDIF();
@@ -52,8 +11,6 @@ rcxDict.prototype = {
     this.config = c;
   },
 
-  //
-
   fileRead: function(url, charset) {
     var req = new XMLHttpRequest();
     req.open("GET", url, false);
@@ -63,7 +20,7 @@ rcxDict.prototype = {
 
   fileReadArray: function(name, charset) {
     var a = this.fileRead(name, charset).split('\n');
-    // Is this just in case there is blank shit in the file.  It was writtin by Jon though.
+    // Is this just in case there is blank shit in the file. It was written by Jon though.
     // I suppose this is more robust
     while ((a.length > 0) && (a[a.length - 1].length == 0)) a.pop();
     return a;
@@ -89,109 +46,23 @@ rcxDict.prototype = {
     return null;
   },
 
-  //
-
   loadNames: function() {
     if ((this.nameDict) && (this.nameIndex)) return;
-    /*this.nameDict = this.fileRead(rcxNamesDict.datURI, rcxNamesDict.datCharset);
-    this.nameIndex = this.fileRead(rcxNamesDict.idxURI, rcxNamesDict.idxCharset);*/
+    // this.nameDict = this.fileRead(rcxNamesDict.datURI, rcxNamesDict.datCharset);
+    // this.nameIndex = this.fileRead(rcxNamesDict.idxURI, rcxNamesDict.idxCharset);
     this.nameDict = this.fileRead(chrome.extension.getURL("data/names.dat"));
     this.nameIndex = this.fileRead(chrome.extension.getURL("data/names.idx"));
   },
 
-  //	Note: These are mostly flat text files; loaded as one continous string to reduce memory use
+  // Note: These are mostly flat text files; loaded as one continous string to reduce memory use
   loadDictionary: function() {
-    /* this.wordDict = this.fileRead(rcxWordDict.datURI, rcxWordDict.datCharset);
-    this.wordIndex = this.fileRead(rcxWordDict.idxURI, rcxWordDict.idxCharset); */
+    // this.wordDict = this.fileRead(rcxWordDict.datURI, rcxWordDict.datCharset);
+    // this.wordIndex = this.fileRead(rcxWordDict.idxURI, rcxWordDict.idxCharset); 
     this.wordDict = this.fileRead(chrome.extension.getURL("data/dict.dat"));
     this.wordIndex = this.fileRead(chrome.extension.getURL("data/dict.idx"));
     this.kanjiData = this.fileRead(chrome.extension.getURL("data/kanji.dat"), 'UTF-8');
     this.radData = this.fileReadArray(chrome.extension.getURL("data/radicals.dat"), 'UTF-8');
-
-    //	this.test_kanji();
   },
-  /*
-  	test_kanji: function() {
-  		var a = this.kanjiData.split('\n');
-
-  		alert('begin test. a.length=' + a.length);
-  		var start = (new Date()).getTime();
-  		for (var i = 0; i < a.length; ++i) {
-  			if (!this.kanjiSearch(a[i].charAt(0))) {
-  				alert('error @' + i + ': ' + a[i]);
-  				return;
-  			}
-  		}
-  		alert('time = ' + ((new Date()).getTime() - start));
-  	},
-  */
-
-  /*
-  	test_index: function() {
-  		var ixF = this.fileRead('chrome://rikaichan/content/dict.idx', 'EUC-JP');
-  		var ixA = ixF.split('\n');
-
-  		while ((ixA.length > 0) && (ixA[ixA.length - 1].length == 0)) ixA.pop();
-
-  //		alert('length=' + ixA.length + ' / ' + ixF.length);
-  if (0) {
-  		var timeA = (new Date()).getTime();
-  		for (var i = ixA.length - 1; i >= 0; --i) {
-  			if ((i & 0xFF) == 0) window.status = 'A: ' + i;
-  			var s = ixA[i];
-  			var r = this.binSearchX(ixA, s.substr(0, s.indexOf(',') + 1));
-  			if ((r == -1) || (ixA[r] != s)) {
-  				alert('A failed: ' + s);
-  				return;
-  			}
-  		}
-  }
-  		timeA = ((new Date()).getTime() - timeA) / 1000;
-
-
-  		var timeF = (new Date()).getTime();
-  		for (var i = ixA.length - 1; i >= 0; --i) {
-  			if ((i & 0xFF) == 0) window.status = 'F: ' + i;
-  			var s = ixA[i];
-  			var r = this.find(ixF, s.substr(0, s.indexOf(',') + 1));
-  			if (r != s) {
-  				alert('F failed: ' + s);
-  				return;
-  			}
-  		}
-  		timeF = ((new Date()).getTime() - timeF) / 1000;
-
-  		var timeX = (new Date()).getTime();
-  if (0) {
-  		for (var i = ixA.length - 1; i >= 0; --i) {
-  			if ((i & 0xFF) == 0) window.status = 'X: ' + i;
-  			var s = ixA[i];
-
-  			var w = s.substr(0, s.indexOf(',') + 1);
-  			var j = 0;
-  			r = '';
-  			if (ixF.substr(0, w.length) == w) {
-  				r = ixF.substr(0, ixF.indexOf('\n'));
-  			}
-  			else {
-  				w = '\n' + w;
-  				j = ixF.indexOf(w);
-  				if (j != -1) r = ixF.substring(j + 1, ixF.indexOf('\n', j + 1));
-  			}
-
-  			if (r != s) {
-  				alert('X failed:\n[' + s + ']\n[' + r + ']');
-  				return;
-  			}
-  		}
-  }
-  		timeX = ((new Date()).getTime() - timeX) / 1000;
-
-  		alert('A=' + timeA + ' / F=' + timeF + ' / X=' + timeX);
-  	},
-
-  */
-  ///
 
   loadDIF: function() {
     this.difReasons = [];
@@ -235,7 +106,7 @@ rcxDict.prototype = {
     o.word = word;
     o.type = 0xFF;
     o.reason = '';
-    //o.debug = 'root';
+    // o.debug = 'root';
     r.push(o);
     have[word] = 0;
 
@@ -261,8 +132,8 @@ rcxDict.prototype = {
                 o = r[have[newWord]];
                 o.type |= (rule.type >> 8);
 
-                //o.reason += ' / ' + r[i].reason + ' ' + this.difReasons[rule.reason];
-                //o.debug += ' @ ' + rule.debug;
+                // o.reason += ' / ' + r[i].reason + ' ' + this.difReasons[rule.reason];
+                // o.debug += ' @ ' + rule.debug;
                 continue;
               }
               have[newWord] = r.length;
@@ -270,7 +141,7 @@ rcxDict.prototype = {
               else o.reason = this.difReasons[rule.reason];
               o.type = rule.type >> 8;
               o.word = newWord;
-              //o.debug = r[i].debug + ' $ ' + rule.debug;
+              // o.debug = r[i].debug + ' $ ' + rule.debug;
               r.push(o);
             }
           }
@@ -281,8 +152,6 @@ rcxDict.prototype = {
 
     return r;
   },
-
-
 
   // katakana -> hiragana conversion tables
   ch: [0x3092, 0x3041, 0x3043, 0x3045, 0x3047, 0x3049, 0x3083, 0x3085, 0x3087, 0x3063, 0x30FC, 0x3042, 0x3044, 0x3046,
@@ -301,7 +170,7 @@ rcxDict.prototype = {
     var entry = {};
 
     // half & full-width katakana to hiragana conversion
-    // note: katakana vu is never converted to hiragana
+    // Note: katakana vu is never converted to hiragana
 
     p = 0;
     r = '';
@@ -339,7 +208,7 @@ rcxDict.prototype = {
       }
 
       r += String.fromCharCode(u);
-      trueLen[r.length] = i + 1; // need to keep real length because of the half-width semi/voiced conversion
+      trueLen[r.length] = i + 1; // Need to keep real length because of the half-width semi/voiced conversion
       p = v;
     }
     word = r;
@@ -354,18 +223,18 @@ rcxDict.prototype = {
     var maxLen = 0;
 
     if (doNames) {
-      // check: split this
+      // Check: split this
 
       this.loadNames();
       dict = this.nameDict;
       index = this.nameIndex;
-      maxTrim = 20; //this.config.namax;
+      maxTrim = 20; // this.config.namax;
       entry.names = 1;
       console.log('doNames');
     } else {
       dict = this.wordDict;
       index = this.wordIndex;
-      maxTrim = 7; //this.config.wmax;
+      maxTrim = 7; // this.config.wmax;
     }
 
     if (max != null) maxTrim = max;
@@ -476,7 +345,7 @@ rcxDict.prototype = {
           o.more = 1;
           break;
         }
-        //				o.data = o.data.concat(e.data);
+        // o.data = o.data.concat(e.data);
         o.data.push(e.data[0]);
         skip = e.matchLen;
       } else {
@@ -532,12 +401,12 @@ rcxDict.prototype = {
 
     if (doNames) {
       e.names = 1;
-      max = 20; //this.config.namax;
+      max = 20; // this.config.namax;
       this.loadNames();
       d = this.nameDict;
     } else {
       e.names = 0;
-      max = 7; //this.config.wmax;
+      max = 7; // this.config.wmax;
       d = this.wordDict;
     }
 
@@ -594,17 +463,15 @@ rcxDict.prototype = {
   },
 
   numList: [
-    /*
-    		'C', 	'Classical Radical',
-    		'DR',	'Father Joseph De Roo Index',
-    		'DO',	'P.G. O\'Neill Index',
-    		'O', 	'P.G. O\'Neill Japanese Names Index',
-    		'Q', 	'Four Corner Code',
-    		'MN',	'Morohashi Daikanwajiten Index',
-    		'MP',	'Morohashi Daikanwajiten Volume/Page',
-    		'K',	'Gakken Kanji Dictionary Index',
-    		'W',	'Korean Reading',
-    */
+    // 'C',  'Classical Radical',
+    // 'DR', 'Father Joseph De Roo Index',
+    // 'DO', 'P.G. O\'Neill Index',
+    // 'O',  'P.G. O\'Neill Japanese Names Index',
+    // 'Q',  'Four Corner Code',
+    // 'MN', 'Morohashi Daikanwajiten Index',
+    // 'MP', 'Morohashi Daikanwajiten Volume/Page',
+    // 'K',  'Gakken Kanji Dictionary Index',
+    // 'W',  'Korean Reading',
     'H', 'Halpern',
     'L', 'Heisig',
     'E', 'Henshall',
@@ -617,7 +484,6 @@ rcxDict.prototype = {
     'I', 'Tuttle Kanji Dictionary',
     'U', 'Unicode'
   ],
-
 
   makeHtml: function(entry) {
     var e;
@@ -717,7 +583,7 @@ rcxDict.prototype = {
         e = entry.data[i][0].match(/^(.+?)\s+(?:\[(.*?)\])?\s*\/(.+)\//);
         if (!e) continue;
 
-        // the next two lines re-process the entries that contain separate search key and spelling due to mixed hiragana/katakana spelling
+        // The next two lines re-process the entries that contain separate search key and spelling due to mixed hiragana/katakana spelling
         e3 = e[3].match(/^(.+?)\s+(?:\[(.*?)\])?\s*\/(.+)\//);
         if (e3) e = e3;
 
@@ -769,11 +635,9 @@ rcxDict.prototype = {
         e = entry.data[i][0].match(/^(.+?)\s+(?:\[(.*?)\])?\s*\/(.+)\//);
         if (!e) continue;
 
-        /*
-        	e[1] = kanji/kana
-        	e[2] = kana
-        	e[3] = definition
-        */
+        // e[1] = kanji/kana
+        // e[2] = kana
+        // e[3] = definition
 
         if (s != e[3]) {
           b.push(t);

@@ -12,10 +12,10 @@ chrome.runtime.onMessage.addListener(
         var e = rcxMain.search(request.text, request.dictOption);
         response(e);
         break;
-        /*			case 'nextDict':
-        				console.log('nextDict');
-        				rcxMain.nextDict();
-        				break;*/
+        // case 'nextDict':
+        //   console.log('nextDict');
+        //   rcxMain.nextDict();
+        //   break;
       case 'resetDict':
         console.log('resetDict');
         rcxMain.resetDict();
@@ -48,19 +48,10 @@ chrome.runtime.onMessage.addListener(
   });
 
 if (initStorage("v0.8.9", true)) {
-  // v0.7
   initStorage("popupcolor", "blue");
   initStorage("highlight", true);
-
-  // v0.8
-  // No changes to options
-
-  // V0.8.5
   initStorage("textboxhl", false);
-
-  // v0.8.6
   initStorage("onlyreading", false);
-  // v0.8.8
   if (localStorage['highlight'] == "yes")
     localStorage['highlight'] = "true";
   if (localStorage['highlight'] == "no")
@@ -85,15 +76,6 @@ if (initStorage("v0.8.9", true)) {
   }
 }
 
-/** 
- * Initializes the localStorage for the given key. 
- * If the given key is already initialized, nothing happens. 
- * 
- * @author Teo (GD API Guru)
- * @param key The key for which to initialize 
- * @param initialValue Initial value of localStorage on the given key 
- * @return true if a value is assigned or false if nothing happens 
- */
 function initStorage(key, initialValue) {
   var currentValue = localStorage[key];
   if (!currentValue) {

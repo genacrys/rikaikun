@@ -99,13 +99,4 @@ function getVals() {
 }
 window.onload = fillVals;
 
-/*function clicktab(tab) {
-	selectedtab = document.getElementById(tab);
-	// change format of all tabs to deselected
-	// change format of selected tab to selected
-	// hide all tab contents
-	// show selected tab contents
-}*/
-
-
 document.querySelector('#submit').addEventListener('click', getVals);
