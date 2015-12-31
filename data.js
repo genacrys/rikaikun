@@ -659,7 +659,7 @@ rcxDict.prototype = {
         if (entry.data[i][1]) b.push(' <span class="w-conj">(' + entry.data[i][1] + ')</span>');
 
         s = e[3];
-        t = s.replace(/\//g, '; ');
+        t = s.replace(/\//g, '; ').replace(/\|/g, '<br/>');
         if ( /* !this.config.wpos */ false) t = t.replace(/^\([^)]+\)\s*/, '');
         if ( /* !this.config.wpop */ false) t = t.replace('; (P)', '');
         if (rcxMain.config.onlyreading == 'false') {
