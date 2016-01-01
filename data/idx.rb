@@ -1,33 +1,36 @@
 require 'sqlite3'
 
-# count = 0
-table = {}
-idx = 0
-File.open('log.txt', 'w') do |log|
+index = {}
+
+File.open('log_idx.tmp', 'w') do |log|
+  # count = 0
+  idx = 0
   File.foreach('dict.dat') do |line|
     # count += 1
     begin
-      word_and_kana = line.gsub(/\s+/, '').split('/')[0].split('[')
-      word = word_and_kana[0]
-      table[word] = [] if table[word] == nil
-      table[word] << idx
+      word_and_writing = line.gsub(/\s+/, '').split('/')[0].split('[')
+      word = word_and_writing[0]
+      index[word] = [] if index[word] == nil
+      index[word] << idx
+      # log.write(line + ' ' + idx)
+      # log.write(word + ' ' + idx.to_s + "\n")
 
-      if word_and_kana.size > 1
-        kana = word_and_kana[1].split(']')[0]
-        table[kana] = [] if table[kana] == nil
-        table[kana] << idx
+      if word_and_writing.size > 1
+        writing = word_and_writing[1].split(']')[0].split('」')[0].gsub('∴「', '')
+        index[writing] = [] if index[writing] == nil
+        index[writing] << idx
       end
       idx += line.length
       # p count.to_s + ' ' + word
     rescue Exception => e
-      # log.write('ERROR: ' + count.to_s + ' ' + word + e.message + "\n")
+      # log.write('ERROR: ' + count.to_s + ' ' + word + ' ' + e.message + "\n")
     end
   end
 end
 
 File.open('dict.idx', 'w') do |file|
-  table.sort_by { |key, idx| key }.each do |key, idx|
-    file.write(key)
+  index.sort_by { |word, idx| word }.each do |word, idx|
+    file.write(word)
     idx.each do |i|
       file.write(',' + i.to_s)
     end
