@@ -2,30 +2,19 @@ require 'sqlite3'
 
 index = {}
 
-File.open('log_idx.tmp', 'w') do |log|
-  # count = 0
-  idx = 0
-  File.foreach('dict.dat') do |line|
-    # count += 1
-    begin
-      word_and_writing = line.gsub(/\s+/, '').split('/')[0].split('[')
-      word = word_and_writing[0]
-      index[word] = [] if index[word] == nil
-      index[word] << idx
-      # log.write(line + ' ' + idx)
-      # log.write(word + ' ' + idx.to_s + "\n")
+idx = 0
+File.foreach('dict.dat') do |line|
+  word_and_writing = line[0..-2].split('/')[0].split('[')
+  word = word_and_writing[0].strip
+  index[word] = [] if index[word] == nil
+  index[word] << idx
 
-      if word_and_writing.size > 1
-        writing = word_and_writing[1].split(']')[0].split('」')[0].gsub('∴「', '')
-        index[writing] = [] if index[writing] == nil
-        index[writing] << idx
-      end
-      idx += line.length
-      # p count.to_s + ' ' + word
-    rescue Exception => e
-      # log.write('ERROR: ' + count.to_s + ' ' + word + ' ' + e.message + "\n")
-    end
+  if word_and_writing.size > 1
+    writing = word_and_writing[1].split(']')[0].strip
+    index[writing] = [] if index[writing] == nil
+    index[writing] << idx
   end
+  idx += line.length
 end
 
 File.open('dict.idx', 'w') do |file|
