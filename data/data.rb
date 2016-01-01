@@ -2,7 +2,7 @@ require 'sqlite3'
 
 dict = {}
 
-db = SQLite3::Database.new 'jv.db'
+db = SQLite3::Database.new 'dict.sqlite'
 query = 'SELECT word, content FROM japanese_vietnamese'
 db.execute query do |row|
   word = row[0]
