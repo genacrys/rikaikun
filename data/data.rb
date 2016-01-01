@@ -11,6 +11,7 @@ end
 query = 'SELECT word, content FROM japanese_vietnamese'
 db_dict.execute query do |row|
   word = row[0]
+  next if word =~ /^\p{Hiragana}+$/
   dict[word] = {}
   contents = row[1]
   contents.scan(/(∴|^)([^∴]+)/).map { |c| c.join('') }.each do |content|
@@ -18,16 +19,15 @@ db_dict.execute query do |row|
     writing = !writing.empty? && writing.join('').strip || '_'
     writing = writing.gsub('「 ', '「').gsub('∴「', '').gsub('」', ' ').strip.split(' ')[0]
 
-    if writing.match(/^[^:|、|。]+$/)
-      content.scan(/(☆)([^☆]+)/).map { |m| m.join('') }.each_with_index do |definition, index|
-        mean = definition.scan(/(◆)([^◆|※]+)/)
-        mean = !mean.empty? && mean.join('').strip || ''
-        mean = mean && mean.gsub(' .', '').gsub('「 ', '「').gsub('[', '(').gsub(']', ')')
-        if index == 0
-          dict[word][writing] = mean
-        else
-          dict[word]['_'] = mean
-        end
+    next if !writing.match(/^[^:|、|。]+$/)
+    content.scan(/(☆)([^☆]+)/).map { |m| m.join('') }.each_with_index do |definition, index|
+      mean = definition.scan(/(◆)([^◆|※]+)/)
+      mean = !mean.empty? && mean.join('').strip || ''
+      mean = mean && mean.gsub(' .', '').gsub('「 ', '「').gsub('[', '(').gsub(']', ')')
+      if index == 0
+        dict[word][writing] = mean
+      else
+        dict[word]['_'] = mean
       end
     end
   end
