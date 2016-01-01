@@ -10,7 +10,7 @@ File.foreach('dict.dat') do |line|
   index[word] << idx
 
   if word_and_writing.size > 1
-    writing = word_and_writing[1].split(']')[0].strip
+    writing = word_and_writing[1].split(']')[0].split(' ')[0].strip
     index[writing] = [] if index[writing] == nil
     index[writing] << idx
   end
