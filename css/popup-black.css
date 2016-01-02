@@ -72,16 +72,28 @@
 /* used for kanji information */
 
 #rikaichan-window .k-main-tb {
-  width: 300px;
+  width: 380px;
 }
 
 #rikaichan-window .k-kanji {
+  text-align: center;
+  width: 50%;
   font-family: serif;
   font-size: 48px;
   color: #FFFFFF;
 }
 
-#rikaichan-window .k-eigo {
+#rikaichan-window .k-box-tb {
+  width: 60%;
+}
+
+#rikaichan-window .k-han {
+  width: 50%;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+
+#rikaichan-window .k-meaning {
   font-size: 12px;
 }
 
@@ -108,7 +120,7 @@
 /* kanji radical, grade, freq, strokes box */
 
 #rikaichan-window .k-abox-tb {
-  width: 120px;
+  width: 40%;
   margin-bottom: 4px;
   float: right;
   clear: right;
@@ -150,7 +162,7 @@
 /* kanji components box */
 
 #rikaichan-window .k-bbox-tb {
-  width: 120px;
+  width: 40%;
   margin-bottom: 4px;
   float: right;
   clear: right;
@@ -192,17 +204,19 @@
 /* kanji: misc index */
 
 #rikaichan-window .k-mix-tb {
-  width: 100%
+  width: 100%;
 }
 
 #rikaichan-window .k-mix-td0 {
-  font-size: 12px;
+  padding-right: 5px;
+  font-size: 10px;
   background: #505050;
   color: #F0F0F0;
 }
 
 #rikaichan-window .k-mix-td1 {
-  font-size: 12px;
+  padding-right: 5px;
+  font-size: 10px;
   background: #303030;
   color: #E0E0E0;
 }
