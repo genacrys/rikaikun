@@ -32,11 +32,6 @@ function fillVals() {
   else
     document.optform.disablekeys.checked = false;
 
-  if (localStorage['kanjicomponents'] == 'true')
-    document.optform.kanjicomponents.checked = true;
-  else
-    document.optform.kanjicomponents.checked = false;
-
   numList = chrome.extension.getBackgroundPage().rcxDict.prototype.numList;
 
   for (i = 0; i * 2 < numList.length; i++) {
@@ -70,7 +65,6 @@ function getVals() {
   localStorage['onlyreading'] = document.optform.onlyreading.checked;
   localStorage['minihelp'] = document.optform.minihelp.checked;
   localStorage['disablekeys'] = document.optform.disablekeys.checked;
-  localStorage['kanjicomponents'] = document.optform.kanjicomponents.checked;
 
   var kanjiinfoarray = new Array(chrome.extension.getBackgroundPage().rcxDict.prototype.numList.length / 2);
   numList = chrome.extension.getBackgroundPage().rcxDict.prototype.numList;
@@ -90,7 +84,6 @@ function getVals() {
   chrome.extension.getBackgroundPage().rcxMain.config.onlyreading = localStorage["onlyreading"];
   chrome.extension.getBackgroundPage().rcxMain.config.minihelp = localStorage["minihelp"];
   chrome.extension.getBackgroundPage().rcxMain.config.disablekeys = localStorage["disablekeys"];
-  chrome.extension.getBackgroundPage().rcxMain.config.kanjicomponents = localStorage["kanjicomponents"];
   chrome.extension.getBackgroundPage().rcxMain.config.kanjiinfo = kanjiinfoarray;
   chrome.extension.getBackgroundPage().rcxMain.config.lineEnding = localStorage["lineEnding"];
   chrome.extension.getBackgroundPage().rcxMain.config.copySeparator = localStorage["copySeparator"];

@@ -69,7 +69,6 @@ if (initStorage("v0.8.9", true)) {
   initStorage("lineEnding", "n");
   initStorage("minihelp", "true");
   initStorage("disablekeys", "false");
-  initStorage("kanjicomponents", "true");
 
   for (i = 0; i * 2 < rcxDict.prototype.numList.length; i++) {
     initStorage(rcxDict.prototype.numList[i * 2], "true")
@@ -95,7 +94,6 @@ rcxMain.config.maxClipCopyEntries = localStorage["maxClipCopyEntries"];
 rcxMain.config.lineEnding = localStorage["lineEnding"];
 rcxMain.config.minihelp = localStorage["minihelp"];
 rcxMain.config.disablekeys = localStorage["disablekeys"];
-rcxMain.config.kanjicomponents = localStorage["kanjicomponents"];
 rcxMain.config.kanjiinfo = new Array(rcxDict.prototype.numList.length / 2);
 for (i = 0; i * 2 < rcxDict.prototype.numList.length; i++) {
   rcxMain.config.kanjiinfo[i] = localStorage[rcxDict.prototype.numList[i * 2]];

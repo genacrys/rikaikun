@@ -455,26 +455,9 @@ rcxDict.prototype = {
   },
 
   numList: [
-    // 'C',  'Classical Radical',
-    // 'DR', 'Father Joseph De Roo Index',
-    // 'DO', 'P.G. O\'Neill Index',
-    // 'O',  'P.G. O\'Neill Japanese Names Index',
-    // 'Q',  'Four Corner Code',
-    // 'MN', 'Morohashi Daikanwajiten Index',
-    // 'MP', 'Morohashi Daikanwajiten Volume/Page',
-    // 'K',  'Gakken Kanji Dictionary Index',
-    // 'W',  'Korean Reading',
-    'H', 'Halpern',
-    'L', 'Heisig',
-    'E', 'Henshall',
-    'DK', 'Kanji Learners Dictionary',
-    'N', 'Nelson',
-    'V', 'New Nelson',
-    'Y', 'PinYin',
-    'P', 'Skip Pattern',
-    'IN', 'Tuttle Kanji &amp; Kana',
-    'I', 'Tuttle Kanji Dictionary',
-    'U', 'Unicode'
+    'P', 'Parts',
+    'M', 'Meaning',
+    'E', 'Examples'
   ],
 
   makeHtml: function(entry) {
@@ -520,13 +503,14 @@ rcxDict.prototype = {
         '<td class="k-abox-g">Cấp độ<br/>N' + entry.level + '</td>' +
         '</tr></table>';
 
-      if (rcxMain.config.kanjicomponents == 'true' && entry.parts !== '') {
+      var kanjiinfo = rcxMain.config.kanjiinfo;
+      if (kanjiinfo[0] == 'true' && entry.parts !== '') {
         box += '<table class="k-bbox-tb">';
         var parts = JSON.parse(entry.parts);
         for (i = 0; i < parts.length; ++i) {
           c = ' class="k-bbox-' + (j ^= 1);
-          box += '<tr><td' + c + 'a">' + parts[i].w + '</td>' +
-            '<td' + c + 'b">' + parts[i].h + '</td></tr>';
+          box += '<tr><td' + c + 'a">' + (parts[i].w == null ? '' : parts[i].w) + '</td>' +
+            '<td' + c + 'b">' + (parts[i].h == null ? '' : parts[i].h) + '</td></tr>';
         }
         box += '</table>';
       }
@@ -534,28 +518,28 @@ rcxDict.prototype = {
       nums = '';
       j = 0;
 
-      // kanjiinfo = rcxMain.config.kanjiinfo;
-      // if (kanjiinfo[i] == 'true') {
-      if (entry.examples !== '') {
+      if (kanjiinfo[1] == 'true' && entry.examples !== '') {
         var meaning = entry.meaning.split('##');
         for (i = 0; i < meaning.length; ++i) {
           nums += '<tr><td class="k-meaning" colspan="4">◆ ' + meaning[i] + '</td></tr>';
         }
+      }
+      if (kanjiinfo[2] == 'true' && entry.examples !== '') {
         var examples = JSON.parse(entry.examples);
         for (i = 0; i < examples.length; ++i) {
           c = ' class="k-mix-td' + (j ^= 1) + '"';
-          nums += '<tr><td' + c + '>' + examples[i].w + '</td>';
-          nums += '<td' + c + '>' + examples[i].h + '</td>';
-          nums += '<td' + c + '>' + examples[i].p + '</td>';
-          nums += '<td' + c + '>' + examples[i].m + '</td></tr>';
+          nums += '<tr><td' + c + '>' + (examples[i].w == null ? '' : examples[i].w) + '</td>';
+          nums += '<td' + c + '>' + (examples[i].h == null ? '' : examples[i].h) + '</td>';
+          nums += '<td' + c + '>' + (examples[i].p == null ? '' : examples[i].p) + '</td>';
+          nums += '<td' + c + '>' + (examples[i].m == null ? '' : examples[i].m) + '</td></tr>';
         }
       }
       if (nums.length) nums = '<table class="k-mix-tb">' + nums + '</table>';
 
       b.push('<table class="k-main-tb"><tr><td valign="top">');
       b.push(box);
-      b.push('<table class="k-box-tb"><tr><td class="k-kanji">' + entry.kanji + '</td><td class="k-han">' +
-        entry.han + '</td></tr></table>');
+      b.push('<table class="k-box-tb"><tr><td class="k-kanji">' + entry.kanji +
+        '</td><td class="k-han">' + entry.han + '</td></tr></table>');
       b.push('<div class="k-yomi">' + yomi + '</div>');
       b.push('</td></tr><tr><td>' + nums + '</td></tr></table>');
       return b.join('');
@@ -707,22 +691,19 @@ rcxDict.prototype = {
 
     if (entry.kanji) {
       b.push(entry.kanji + '\n');
-      b.push((entry.eigo.length ? entry.eigo : '-') + '\n');
+      b.push(entry.han + '\n');
+      b.push(entry.onyomi + '\n');
+      b.push(entry.kunyomi + '\n');
+      b.push(entry.meaning + '\n');
+      b.push(entry.stroke_count + '\n');
 
-      b.push(entry.onkun.replace(/\.([^\u3001]+)/g, '\uFF08$1\uFF09') + '\n');
-      if (entry.nanori.length) {
-        b.push('\u540D\u4E57\u308A\t' + entry.nanori + '\n');
+      var parts = JSON.parse(entry.parts);
+      for (i = 0; i < parts.length; ++i) {
+        b.push(parts[i].w + ';' + parts[i].h + '\n');
       }
-      if (entry.bushumei.length) {
-        b.push('\u90E8\u9996\u540D\t' + entry.bushumei + '\n');
-      }
-
-      for (i = 0; i < this.numList.length; i += 2) {
-        e = this.numList[i];
-        if ( /* this.config.kdisp[e] */ 1 == 1) {
-          j = entry.misc[e];
-          b.push(this.numList[i + 1].replace('&amp;', '&') + '\t' + (j ? j : '-') + '\n');
-        }
+      var examples = JSON.parse(entry.examples);
+      for (i = 0; i < examples.length; ++i) {
+        b.push(examples[i].w + ';' + examples[i].h + ';' + examples[i].p + ';' + examples[i].m + '\n');
       }
     } else {
       if (max > entry.data.length) max = entry.data.length;
