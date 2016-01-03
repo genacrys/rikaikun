@@ -21,10 +21,10 @@ File.open('kanji.dat', 'w') do |file|
     file.write(contents[:han] + '|')
     file.write(contents[:onyomi] + '|')
     file.write(contents[:kunyomi] + '|')
-    file.write(contents[:meaning] + '|')
+    file.write(contents[:meaning].gsub(' .', '.') + '|')
     file.write(contents[:stroke_count].to_s + '|')
-    file.write(contents[:parts] + '|')
-    file.write(contents[:examples] + '|')
+    file.write(contents[:parts].gsub(' .', '.') + '|')
+    file.write(contents[:examples].gsub(' .', '.') + '|')
     file.write(contents[:level].to_s + "\n")
   end
 end
