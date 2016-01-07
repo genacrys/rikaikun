@@ -1,5 +1,4 @@
-#rikaikun_options,
-#rikaikun_options td {
+#rikaikun_options, #rikaikun_options td {
   padding: 0 10px;
   font-family: sans-serif;
   font-size: 10pt;
@@ -42,8 +41,7 @@
   border: 1px solid black;
 }
 
-#options p,
-#options form {
+#options p, #options form {
   margin: 0;
   padding: 0;
 }
